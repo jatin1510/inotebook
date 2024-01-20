@@ -9,7 +9,7 @@ router.get('/fetchallnotes', fetchuser, async (req, res) =>
 {
     try {
         const notes = await Note.find({ user: req.user.id })
-            .then(data => { res.send(data); })
+            .then(data => { res.json(data); })
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Internal server error" });
@@ -19,7 +19,6 @@ router.get('/fetchallnotes', fetchuser, async (req, res) =>
 // ROUTE 2 : add a new note of a user using: POST "/api/notes/addnote". Login required
 router.post('/addnote', fetchuser, [
     body("title", "Enter a valid title").exists(),
-    body("description", "Description must be atleast 5 characters").exists(),
 ], async (req, res) =>
 {
     try {
@@ -35,7 +34,7 @@ router.post('/addnote', fetchuser, [
         })
             .then((data) =>
             {
-                res.send(data);
+                res.json(data);
             })
     }
     catch (error) {
@@ -72,7 +71,7 @@ router.put('/updatenote/:id', fetchuser, async (req, res) =>
         await Note.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
             .then((data) =>
             {
-                res.send(data);
+                res.json(data);
             })
     }
     catch (error) {
